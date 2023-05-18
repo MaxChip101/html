@@ -8,7 +8,7 @@
 
 <script>
     function refreshFile() {
-        var fileContainer = document.getElementById('file-container');
+        var fileContainer = document.getElementById('list');
         var file = document.createElement('object');
         file.setAttribute('data', 'messages.txt');
         file.setAttribute('type', 'text/plain');
@@ -45,7 +45,7 @@
         Commands > [!D - disconnect from room]
     </div>
     
-    <div id="file-container"><p><iframe src="messages.txt" width=100% height=1000px frameborder=0 style="background-color: white;"></iframe></p></div>
+    <div id="list"><p><iframe src="messages.txt" width=100% height=1000px frameborder=0 style="background-color: white;"></iframe></p></div>
     
 </body>
 
