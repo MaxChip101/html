@@ -2,7 +2,7 @@ import socket
 import threading
 import os
 
-HEADER = 64
+HEADER = 1024
 PORT = 5351
 SERVER = "192.168.0.47"
 ADDR = (SERVER, PORT)
