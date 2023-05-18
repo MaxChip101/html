@@ -42,7 +42,7 @@ def handle_client(conn, addr):
                     f.write("")
 
                 with open("messages.txt", "a") as f:
-                    f.write(addr + " > " + msg)
+                    f.write(f"{addr} >  {msg}")
                     f.write(str(pf))
 
     conn.close()
