@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Xenonium | Chat Room - 5351</title>
+    <link rel="icon" href="assets/chat.png">
+</head>
+
+<script>
+    function refreshFile() {
+        var fileContainer = document.getElementById('file-container');
+        var file = document.createElement('object');
+        file.setAttribute('data', 'messages.txt');
+        file.setAttribute('type', 'text/plain');
+        file.setAttribute('id', 'embedded-file');
+
+        fileContainer.innerHTML = '';
+        fileContainer.appendChild(file);
+    }
+</script>
+
+<style>
+    @font-face {
+        font-family: RG;
+        src: url('assets/Renegade_Pursuit.otf');
+    }
+</style>
+
+<body style="background-color: black; font-family: RG;">
+    <button onclick="refreshFile()" style="font-family: RG;">Refresh Chat</button>
+
+    <button type="submit" title="Xenonium | Home" style="float:right ;">
+        <img src="assets/home.png" onclick="location.href='index.html'" style="width:50px; height: 50px;">
+    </button>
+
+    <form method="get" action="downloads/Room - 5351 ; Client.zip" style="display:inline-block">
+        <button type="submit" style="font-family: RG;">Download Chat Window</button>
+    </form>
+
+    <div style="background-color: white; width: 500px; height: 25px; display:inline-block">
+        ROOM - 5351
+    </div>
+
+    <div style="background-color: grey; width: 100%; height: 50px; display:inline-block;">
+        Commands > [!D - disconnect from room]
+    </div>
+
+    <div id="file-container" style="background-color: white; font-family: RG;">
+        <object data="messages.txt" type="text/plain" id="embedded-file"></object>
+    </div>
+</body>
+
+</html>
