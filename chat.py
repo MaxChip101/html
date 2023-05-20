@@ -1,66 +1,18 @@
-import socket
-import threading
-import os
+from flask import Flask, render_template, request
 
-HEADER = 1024
-PORT = 5351
-SERVER = "192.168.0.47"
-ADDR = (SERVER, PORT)
-FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "!D"
+app = Flask(__name__)
 
-IPS = []
-USERNAMES = []
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        # Retrieve the message from the request
+        message = request.form['message']
 
-Messages = []
+        # Append the message to the file
+        with open('messages.txt', 'a') as file:
+            file.write(message + '\n')
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
+    return render_template('index.html')
 
-open("messages.txt", "w")
-
-def handle_client(conn, addr):
-    print(f"[NEW CONNECTION] {addr} connected")
-    IPS.append(addr)
-    connected = True
-    while connected:
-        msg_length = conn.recv(HEADER).decode(FORMAT)
-        if msg_length:
-            msg_length = int(msg_length)
-            msg = conn.recv(msg_length).decode(FORMAT)
-            Messages.append(f"{addr} : {msg}")
-            if msg == DISCONNECT_MESSAGE:
-                connected = False
-                print("| !DISCONNECTED FROM CHAT! |")
-
-            print(f"[{addr}] {msg}")
-
-            with open("messages.txt", "r") as file:
-                pf = file.read()
-
-                with open("messages.txt", "w") as f:
-                    f.write("")
-
-                with open("messages.txt", "a") as f:
-                    f.write(f"{addr} >  {msg}")
-                    f.write(str(pf))
-
-    conn.close()
-
-
-def start():
-    server.listen()
-    print(f"[LISTENING] {SERVER}")
-    while True:
-        conn, addr = server.accept()
-        thread = threading.Thread(target=handle_client, args=(conn, addr))
-        thread.start()
-        print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
-
-
-print("[STARTING SERVER]")
-start()
-
-
-
-
+if __name__ == '__chat__':
+    app.run()
