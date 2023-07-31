@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Xenonium | Xenon Chat Room - {{roomid}}</title>
+    <link rel="icon" href="{{ url_for('static', filename='assets/chat.png') }}">
+</head>
+
+<script>
+
+</script>
+
+<style>
+    @font-face {
+        font-family: RG;
+        src: url({{ url_for('static', filename='assets/Renegade_Pursuit.otf') }});
+    }
+
+    .centered-top {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    left: 50%;
+    padding: 20px;
+}
+</style>
+
+<body style="background-color: black; font-family: RG;">
+
+    <button onclick="refresh()" style="font-family: RG; float: left;">Refresh Chat</button>
+
+    <div style="width: 10px; float: left;">|</div>
+
+    <button type="submit" title="Xenonium | Home" style="float: right;">
+        <img src="{{ url_for('static', filename='assets/home.png') }}" onclick="location.href='/home'" style="width:40px; height: 40px;">
+    </button>
+
+    <div style="background-color: white; width: 500px; height: 25px; display:inline-block">
+        Xenon Chat | ROOM - {{roomid}} | Username - <span id="outputValue"></span>
+    </div>
+
+    <form action="/chatroom" method="post" style="float: right">
+        <label for="input1" style="color: white">Chatroom:</label>
+        <input type="text" name="room" required>
+        <input type="submit" value="Change Room" style="font-family: RG;">
+    </form>
+
+    <form id="userInputForm" method="post">
+        <label for="input1" style="color: white">Message:</label>
+        <input type="text" id="input1" name="msg" autofocus required>
+        <button type="submit" onclick="refresh()" style="font-family: RG;">Send</button>
+    </form>
+
+    <form class="centered-top">
+        <label for="inputValue" style="color: white">Username:</label>
+        <input type="text" id="inputValue">
+        <button onclick="saveValue()" style="font-family: RG;">Change Username</button>
+    </form>
+
+    <div id="list" style="background-color: white;">
+        <p><iframe src="{{ url_for('static', filename='chatrooms/' + roomid + '.txt') }}" width=100% height=1000px frameborder=0 style="background-color: white;"></iframe></p>
+    </div>
+
+    <script>
+
+    function refresh() {
+        window.location.reload();
+    }
+
+    // Function to save the value in localStorage
+    function saveValue() {
+        const inputValue = document.getElementById("inputValue").value;
+        localStorage.setItem("username", inputValue);
+        displayValue();
+    }
+
+    // Function to display the variable's value
+    function displayValue() {
+       const outputValue = document.getElementById("outputValue");
+       const savedValue = localStorage.getItem("username");
+        outputValue.textContent = savedValue || "unameduser";
+    }
+
+    // On page load, display the stored value (if any)
+    window.onload = displayValue;
+
+        document.getElementById('userInputForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var msg = document.getElementById('input1').value;
+            var room = {{roomid}}
+            var name = localStorage.getItem("username");
+
+            fetch('/sendmsg', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({msg: msg, room: room, name: name})
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message); // Log the response message in the browser console
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
